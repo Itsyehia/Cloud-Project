@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stored Social Media Groups</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"></script>
+</head>
+<body>
+  <h1>Stored Social Media Groups</h1>
+  <ul id="groupsList"></ul>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCTye_awknGgBH4dfz7WfDSHHLmdIRGVs8",
+      authDomain: "taskcloud-54da2.firebaseapp.com",
+      projectId: "taskcloud-54da2",
+      storageBucket: "taskcloud-54da2.appspot.com",
+      messagingSenderId: "488231621125",
+      appId: "1:488231621125:web:651487ff424fd394fe426c",
+      measurementId: "G-9XKBGRRDX8",
+      databaseURL: "https://taskcloud-54da2-default-rtdb.firebaseio.com/"
+    };
+
+    // Initialize Firebase and Realtime Database
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Fetch and display groups
+    function fetchGroups() {
+      const groupsList = document.getElementById('groupsList');
+      groupsList.innerHTML = '';  // Clear the list before displaying new data
+
+      const groupsRef = ref(db, 'socialMediaGroups');
+      onValue(groupsRef, (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const group = childSnapshot.val();
+          const listItem = document.createElement('li');
+          listItem.textContent = `Group Name: ${group.name}, Group Type: ${group.type}`;
+          groupsList.appendChild(listItem);
+        });
+      });
+    }
+
+    // Call the function to fetch groups when the page loads
+    fetchGroups();
+  </script>
+</body>
+</html>

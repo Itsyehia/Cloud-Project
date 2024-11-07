@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Social Media Groups Form</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"></script>
+</head>
+<body>
+  <h1>Social Media Groups Form</h1>
+  <form id="groupForm">
+    <label for="groupName">Group Name:</label>
+    <input type="text" id="groupName" required>
+    <label for="groupType">Group Type:</label>
+    <input type="text" id="groupType" required>
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Button to redirect to display page -->
+  <button onclick="window.location.href='display.html'">Go to Display Page</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCTye_awknGgBH4dfz7WfDSHHLmdIRGVs8",
+      authDomain: "taskcloud-54da2.firebaseapp.com",
+      projectId: "taskcloud-54da2",
+      storageBucket: "taskcloud-54da2.appspot.com",
+      messagingSenderId: "488231621125",
+      appId: "1:488231621125:web:651487ff424fd394fe426c",
+      measurementId: "G-9XKBGRRDX8",
+      databaseURL: "https://taskcloud-54da2-default-rtdb.firebaseio.com/"
+    };
+
+    // Initialize Firebase and Realtime Database
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Save group data
+    const groupForm = document.getElementById('groupForm');
+    groupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const groupName = document.getElementById('groupName').value;
+      const groupType = document.getElementById('groupType').value;
+
+      // Add a new entry to the database
+      const groupsRef = ref(db, 'socialMediaGroups');
+      await push(groupsRef, {
+        name: groupName,
+        type: groupType,
+        createdAt: Date.now(),
+      });
+
+      groupForm.reset();
+
+      // Redirect to the display page after submitting the form
+      window.location.href = 'display.html';  // This redirects to the display page
+    });
+  </script>
+</body>
+</html>
